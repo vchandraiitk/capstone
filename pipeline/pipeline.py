@@ -6,6 +6,7 @@ from pipeline.deploy_model import deploy_model
 PROJECT = "planar-sun-456513-i8"
 BUCKET = "capstone-group15"
 LOCATION = "us-central1"
+## do something 
 
 if __name__ == "__main__":
     save_model()

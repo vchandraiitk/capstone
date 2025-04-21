@@ -35,4 +35,6 @@ jobs:
           gsutil cp artifacts/simple_model.pt gs://capstone-group15/models/simple_model.pt
 
       - name: Deploy model via pipeline
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json  # 👈 this line is critical
         run: python pipeline/pipeline.py

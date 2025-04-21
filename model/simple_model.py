@@ -1,3 +1,4 @@
+# model.py
 import torch
 import torch.nn as nn
 
@@ -9,5 +10,10 @@ class SimpleModel(nn.Module):
     def forward(self, x):
         return self.linear(x)
 
-model = SimpleModel()
-torch.save(model, "model.pt")
+def save_model():
+    model = SimpleModel()
+    torch.save(model, "model.pt")
+    print("✅ model.pt created")
+
+if __name__ == "__main__":
+    save_model()

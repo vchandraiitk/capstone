@@ -1,7 +1,7 @@
 from google.cloud import aiplatform
 
 def run_pipeline():
-    aiplatform.init(project="planar-sun-456513", location="us-central1")
+    aiplatform.init(project="planar-sun-456513-i8", location="us-central1")
 
     model = aiplatform.Model.upload(
         display_name="simple-model",

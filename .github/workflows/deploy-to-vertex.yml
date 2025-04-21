@@ -32,8 +32,8 @@ jobs:
 
       - name: Upload model to GCS
         run: |
-          gsutil cp artifacts/simple_model.pt gs://capstone-group15/models/simple_model.pt
-
+          gsutil cp artifacts/simple_model.pt gs://capstone-group15/models/simple-v1/
+          
       - name: Deploy model via pipeline
         env:
           GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json  # 👈 this line is critical

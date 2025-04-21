@@ -1,38 +1,32 @@
-name: Auto-Deploy to Vertex AI
+name: Deploy PyTorch Model to Vertex AI
 
 on:
   push:
-    paths:
-      - 'artifacts/*.pt'        # Trigger only when model files change
-      - 'pipeline/pipeline.py'
+    branches: [main]
 
 jobs:
-  deploy-model:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+    - uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
 
-      - name: Install dependencies
-        run: |
-          pip install google-cloud-storage google-cloud-aiplatform torch
+    - name: Install dependencies
+      run: |
+        pip install torch torch-model-archiver google-cloud-storage google-cloud-aiplatform
 
-      - name: Authenticate with GCP
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
-        run: |
-          echo "${{ secrets.GCP_SA_KEY_64 }}" | base64 --decode > gcp-key.json
-          gcloud auth activate-service-account --key-file=gcp-key.json
-
-      - name: Upload model to GCS
-        run: |
-          gsutil cp artifacts/simple_model.pt gs://capstone-group15/models/simple-v1/
+    - name: Run deployment pipeline
+      env:
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY_64 }}
+      run: |
+        echo "$GOOGLE_APPLICATION_CREDENTIALS" > key.json
+        export GOOGLE_APPLICATION_CREDENTIALS=key.json
+        python pipeline.py
           
       - name: Deploy model via pipeline
         env:

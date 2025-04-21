@@ -22,7 +22,7 @@ jobs:
 
     - name: Run deployment pipeline
       env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_SA_KEY_64 }}
+        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GCP_KEY }}
       run: |
         echo "$GOOGLE_APPLICATION_CREDENTIALS" > key.json
         export GOOGLE_APPLICATION_CREDENTIALS=key.json

@@ -27,7 +27,7 @@ jobs:
         env:
           GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json
         run: |
-          echo "${{ secrets.GCP_SA_KEY }}" | tr -d '\r' > gcp-key.json
+          printf '%s' "${{ secrets.GCP_SA_KEY }}" > gcp-key.json
           gcloud auth activate-service-account --key-file=gcp-key.json
 
       - name: Upload model to GCS

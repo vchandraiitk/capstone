@@ -1,21 +1,14 @@
-from google.cloud import aiplatform
+from pipeline.model import save_model
+from pipeline.mar_creator import create_mar
+from pipeline.gcs_upload import upload_mar
+from pipeline.deploy_model import deploy_model
 
-def run_pipeline():
-    aiplatform.init(project="planar-sun-456513-i8", location="us-central1")
-
-    model = aiplatform.Model.upload(
-        display_name="simple-model",
-        artifact_uri="gs://capstone-group15/models/simple-v1/",  # ✅ folder only
-        serving_container_image_uri="us-docker.pkg.dev/vertex-ai/prediction/pytorch-cpu.1-13:latest"
-    )
-
-    endpoint = aiplatform.Endpoint.create(display_name="simple-model-endpoint")
-
-    model.deploy(
-        endpoint=endpoint,
-        deployed_model_display_name="simple-model-v1",
-        machine_type="n1-standard-2"
-    )
+PROJECT = "planar-sun-456513-i8"
+BUCKET = "capstone-group15"
+LOCATION = "us-central1"
 
 if __name__ == "__main__":
-    run_pipeline()
+    save_model()
+    create_mar()
+    upload_mar(bucket_name=BUCKET)
+    deploy_model(PROJECT, LOCATION, BUCKET)

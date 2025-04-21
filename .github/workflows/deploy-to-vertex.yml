@@ -27,8 +27,3 @@ jobs:
         echo "$GOOGLE_APPLICATION_CREDENTIALS" > key.json
         export GOOGLE_APPLICATION_CREDENTIALS=key.json
         python pipeline.py
-          
-      - name: Deploy model via pipeline
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: gcp-key.json  # 👈 this line is critical
-        run: python pipeline/pipeline.py

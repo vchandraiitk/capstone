@@ -1,6 +1,5 @@
+from google.cloud import storage
 from pipeline.model import save_model
-from pipeline.mar_creator import create_mar
-from pipeline.gcs_upload import upload_mar
 from pipeline.deploy_model import deploy_model
 
 PROJECT = "planar-sun-456513-i8"
@@ -8,8 +7,14 @@ BUCKET = "capstone-group15"
 LOCATION = "us-central1"
 GCS_SUBDIR = "models/simple-v1/"
 
+def upload_model_pt(bucket_name, gcs_subdir="models/simple-v1/"):
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(f"{gcs_subdir}model.pt")
+    blob.upload_from_filename("model.pt")
+    print(f"✅ Uploaded model.pt to gs://{bucket_name}/{gcs_subdir}model.pt")
+
 if __name__ == "__main__":
-    save_model()
-    create_mar()
-    upload_mar(bucket_name=BUCKET, gcs_subdir=GCS_SUBDIR)
+    save_model()  # saves model.pt locally
+    upload_model_pt(bucket_name=BUCKET, gcs_subdir=GCS_SUBDIR)
     deploy_model(PROJECT, LOCATION, BUCKET, gcs_subdir=GCS_SUBDIR)
